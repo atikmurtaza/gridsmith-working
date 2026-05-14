@@ -66,26 +66,55 @@ export default function Overlay() {
     });
   };
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
     const orig = btn.innerText;
     btn.innerText = 'Sending...';
     btn.style.opacity = '0.7';
     btn.disabled = true;
-    setTimeout(() => {
-      btn.innerText = 'Message Sent!';
-      btn.style.background = '#f5f5f5';
-      btn.style.color = '#0a0a0a';
-      btn.style.opacity = '1';
+
+    const formData = new FormData(e.target);
+    
+    // Web3Forms Access Key
+    // You will replace the text below with your actual key
+    formData.append("access_key", "YOUR_WEB3FORMS_ACCESS_KEY_HERE");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        btn.innerText = 'Message Sent!';
+        btn.style.background = '#f5f5f5';
+        btn.style.color = '#0a0a0a';
+        btn.style.opacity = '1';
+        setTimeout(() => {
+          e.target.reset();
+          btn.innerText = orig;
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.disabled = false;
+        }, 3000);
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error(error);
+      btn.innerText = 'Error! Try Again.';
+      btn.style.background = '#ff3333';
+      btn.style.color = '#ffffff';
       setTimeout(() => {
-        e.target.reset();
         btn.innerText = orig;
         btn.style.background = '';
         btn.style.color = '';
         btn.disabled = false;
       }, 3000);
-    }, 1500);
+    }
   };
 
   return (
@@ -281,7 +310,7 @@ export default function Overlay() {
       </section>
 
       {/* Contact & FAQ */}
-      <section id="contact" className="py-20 px-8 bg-bg-charcoal/50 backdrop-blur-md reveal-section mt-20">
+      <section id="contact" className="py-20 px-8 reveal-section mt-20">
         <div className="max-w-7xl mx-auto w-full">
           <div className="mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4">Start a Project</h2>
@@ -293,15 +322,15 @@ export default function Overlay() {
               <form className="flex flex-col gap-5" onSubmit={handleForm}>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm text-text-muted">Name</label>
-                  <input type="text" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition" placeholder="Your name" required />
+                  <input type="text" name="name" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition" placeholder="Your name" required />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm text-text-muted">Email</label>
-                  <input type="email" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition" placeholder="hello@example.com" required />
+                  <input type="email" name="email" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition" placeholder="hello@example.com" required />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm text-text-muted">Project Type</label>
-                  <select className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition appearance-none" required>
+                  <select name="projectType" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition appearance-none" required>
                     <option value="" disabled selected>Select a category...</option>
                     <option value="graphics">Graphics Design (Gaming/Streaming/Branding)</option>
                     <option value="web-business">Web Development</option>
@@ -310,7 +339,7 @@ export default function Overlay() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm text-text-muted">Message</label>
-                  <textarea className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition min-h-[120px]" placeholder="Tell us about your project..." required></textarea>
+                  <textarea name="message" className="bg-black/30 border border-glass-border p-3 rounded-lg text-white focus:outline-none focus:border-gold transition min-h-[120px]" placeholder="Tell us about your project..." required></textarea>
                 </div>
                 <button type="submit" className="btn btn-primary mt-2">Submit Inquiry</button>
               </form>
