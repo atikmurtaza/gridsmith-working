@@ -11,11 +11,11 @@ export default function Overlay() {
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
       gsap.utils.toArray('.reveal-section').forEach(section => {
-        gsap.fromTo(section, 
+        gsap.fromTo(section,
           { opacity: 0, y: 50 },
-          { 
-            opacity: 1, 
-            y: 0, 
+          {
+            opacity: 1,
+            y: 0,
             duration: 1,
             scrollTrigger: {
               trigger: section,
@@ -54,7 +54,7 @@ export default function Overlay() {
     e.preventDefault();
     navigator.clipboard.writeText('contact.gridsmith@gmail.com').then(() => {
       const el = document.getElementById('emailCopyText');
-      if(el) {
+      if (el) {
         const orig = el.innerText;
         el.innerText = 'Copied!';
         el.style.color = 'var(--color-gold)';
@@ -75,15 +75,23 @@ export default function Overlay() {
     btn.disabled = true;
 
     const formData = new FormData(e.target);
-    
+
     // Web3Forms Access Key
     // You will replace the text below with your actual key
-    formData.append("access_key", "YOUR_WEB3FORMS_ACCESS_KEY_HERE");
+    formData.append("access_key", "2036f7b0-67eb-491e-aa49-1f23d642b0ec");
+
+    // Convert to JSON to bypass Cloudflare WAF issues
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: json
       });
 
       const data = await response.json();
@@ -121,7 +129,7 @@ export default function Overlay() {
     <div id="main-scroll-container" ref={containerRef} className="relative w-full text-text-main z-10">
       {/* Navigation */}
       <nav className="fixed w-full flex justify-between items-center px-8 py-4 z-50 backdrop-blur-md bg-black/30 border-b border-glass-border">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <img src="./assets/logo.png" alt="Logo" className="h-8" />
           <span className="font-bold text-xl tracking-wider uppercase text-gradient">Gridsmith Ltd</span>
         </div>
@@ -138,7 +146,7 @@ export default function Overlay() {
         <h1 className="text-5xl md:text-7xl font-bold text-gradient uppercase tracking-tight max-w-4xl drop-shadow-lg">
           Architects of the <br /> Digital Frontier
         </h1>
-        
+
         <div className="flex flex-col items-center">
           <p className="text-lg md:text-xl text-text-muted max-w-2xl mb-8 drop-shadow-md">
             Premium web development, 3D modeling, and brand identity for forward-thinking businesses and creators.
@@ -155,7 +163,7 @@ export default function Overlay() {
         <div className="max-w-7xl mx-auto w-full">
           <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4">Our Expertise</h2>
           <p className="text-text-muted mb-12 max-w-xl">We blend technical precision with creative vision across three core disciplines.</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="glass-card p-8 group hover:-translate-y-2 transition-transform duration-300">
               <div className="text-gold text-4xl mb-6">01</div>
@@ -200,7 +208,7 @@ export default function Overlay() {
           </div>
 
           <div className="flex flex-col gap-20">
-            
+
             {/* Graphic Designs */}
             <div className="reveal-section">
               <h3 className="text-2xl font-bold mb-6 text-gold-light border-b border-glass-border pb-2 tracking-wide uppercase">Graphic Designs</h3>
@@ -279,14 +287,14 @@ export default function Overlay() {
 
           <div className="relative flex items-center w-full">
             <button onClick={() => scrollCarousel(testCarouselRef, 'prev')} className="absolute -left-6 z-20 w-12 h-12 rounded-full bg-black/50 border border-glass-border backdrop-blur flex items-center justify-center hover:bg-gold/20 hover:text-gold transition text-xl cursor-pointer" aria-label="Previous Testimonial">&#10094;</button>
-            
+
             <div ref={testCarouselRef} className="flex overflow-x-auto snap-x snap-mandatory gap-8 py-5 w-full no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              
+
               {[
-                {quote: "Gridsmith absolutely transformed our brand identity and web presence. Their attention to detail and ability to blend sleek aesthetics with high performance is unmatched.", author: "James Davies", role: "CEO, TechNova", init: "JD", bg: "bg-bg-dark"},
-                {quote: "The stream overlays and emotes they designed for my channel took my content to the next level. I've never felt more professional as a creator. Highly recommended!", author: "Sarah Lin", role: "Twitch Partner", init: "SL", bg: "bg-bronze"},
-                {quote: "Their 3D architectural renders were breathtaking. They brought our conceptual blueprints to life with photorealistic lighting that helped us win a major client pitch.", author: "Michael Rowe", role: "Lead Architect, ARC Studio", init: "MR", bg: "bg-umber"},
-                {quote: "The bespoke E-Commerce platform they built for us increased our conversion rate by 40%. Beautiful design meets flawless functionality.", author: "Elena Katz", role: "Founder, Vora Fashion", init: "EK", bg: "bg-sand"},
+                { quote: "Gridsmith absolutely transformed our brand identity and web presence. Their attention to detail and ability to blend sleek aesthetics with high performance is unmatched.", author: "James Davies", role: "CEO, TechNova", init: "JD", bg: "bg-bg-dark" },
+                { quote: "The stream overlays and emotes they designed for my channel took my content to the next level. I've never felt more professional as a creator. Highly recommended!", author: "Sarah Lin", role: "Twitch Partner", init: "SL", bg: "bg-bronze" },
+                { quote: "Their 3D architectural renders were breathtaking. They brought our conceptual blueprints to life with photorealistic lighting that helped us win a major client pitch.", author: "Michael Rowe", role: "Lead Architect, ARC Studio", init: "MR", bg: "bg-umber" },
+                { quote: "The bespoke E-Commerce platform they built for us increased our conversion rate by 40%. Beautiful design meets flawless functionality.", author: "Elena Katz", role: "Founder, Vora Fashion", init: "EK", bg: "bg-sand" },
               ].map((item, i) => (
                 <div key={i} className="flex-none w-full md:w-[calc(33.333%-21px)] snap-start glass-card p-8 flex flex-col relative">
                   <div className="text-6xl text-glass-border absolute top-2 right-6 font-serif leading-none">"</div>
@@ -347,7 +355,7 @@ export default function Overlay() {
 
             <div className="glass-card p-8 flex flex-col gap-4 self-start w-full">
               <h3 className="text-2xl font-bold text-gold mb-4">Frequently Asked Questions</h3>
-              
+
               <details className="group bg-black/30 border border-glass-border rounded-lg p-4 transition duration-300 open:border-gold">
                 <summary className="flex justify-between items-center font-semibold text-gold-light cursor-pointer list-none">
                   What is your typical turnaround time?
@@ -393,18 +401,18 @@ export default function Overlay() {
         <div className="max-w-[1000px] mx-auto text-center">
           <h2 className="text-4xl font-bold mb-2">Connect With Us</h2>
           <p className="text-text-muted mb-12">Reach out to us directly or follow our journey across all platforms.</p>
-          
+
           <div className="flex flex-wrap justify-center gap-5">
             {[
-              {name: 'Gmail', icon: <><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, link: "https://mail.google.com/mail/?view=cm&fs=1&to=contact.gridsmith@gmail.com"},
-              {name: 'Facebook', icon: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>, link: "https://www.facebook.com/gridsmith"},
-              {name: 'Instagram', icon: <><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></>, link: "https://www.instagram.com/gridsmith_ltd"},
-              {name: 'X', icon: <><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></>, link: "https://x.com/gridsmithltd"},
-              {name: 'Freelancer', icon: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></>, link: "https://www.freelancer.com/u/GridsmithLTD"},
-              {name: 'LinkedIn', icon: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></>, link: "https://www.linkedin.com/company/gridsmith"},
-              {name: 'TikTok', icon: <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>, link: "https://www.tiktok.com/@gridsmithltd"},
-              {name: 'YouTube', icon: <><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></>, link: "https://www.youtube.com/@Gridsmithltd"},
-              {name: 'Reddit', icon: <><circle cx="12" cy="12" r="10"/><path d="M12 8l-3 4h6z"/><path d="M12 16c2 0 3-1 3-1"/></>, link: "https://www.reddit.com/u/Gridsmithltd/s/CsBkRtMNP8"},
+              { name: 'Gmail', icon: <><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></>, link: "https://mail.google.com/mail/?view=cm&fs=1&to=contact.gridsmith@gmail.com" },
+              { name: 'Facebook', icon: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />, link: "https://www.facebook.com/gridsmith" },
+              { name: 'Instagram', icon: <><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></>, link: "https://www.instagram.com/gridsmith_ltd" },
+              { name: 'X', icon: <><path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></>, link: "https://x.com/gridsmithltd" },
+              { name: 'Freelancer', icon: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>, link: "https://www.freelancer.com/u/GridsmithLTD" },
+              { name: 'LinkedIn', icon: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></>, link: "https://www.linkedin.com/company/gridsmith" },
+              { name: 'TikTok', icon: <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />, link: "https://www.tiktok.com/@gridsmithltd" },
+              { name: 'YouTube', icon: <><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></>, link: "https://www.youtube.com/@Gridsmithltd" },
+              { name: 'Reddit', icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8l-3 4h6z" /><path d="M12 16c2 0 3-1 3-1" /></>, link: "https://www.reddit.com/u/Gridsmithltd/s/CsBkRtMNP8" },
             ].map((social, i) => (
               <a key={i} href={social.link} target="_blank" rel="noreferrer" className="flex-[0_0_calc(20%-16px)] min-w-[120px] flex flex-col items-center justify-center gap-3 p-6 glass-card hover:-translate-y-2 hover:bg-gold/10 hover:border-gold transition duration-300 group cursor-pointer text-text-main hover:text-gold no-underline">
                 <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="text-gold group-hover:scale-110 transition-transform">
@@ -413,10 +421,10 @@ export default function Overlay() {
                 <span className="text-sm font-medium">{social.name}</span>
               </a>
             ))}
-            
+
             <a onClick={copyEmail} className="flex-[0_0_calc(20%-16px)] min-w-[120px] flex flex-col items-center justify-center gap-3 p-6 glass-card hover:-translate-y-2 hover:bg-gold/10 hover:border-gold transition duration-300 group cursor-pointer text-text-main hover:text-gold no-underline">
               <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="text-gold group-hover:scale-110 transition-transform">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" />
               </svg>
               <span id="emailCopyText" className="text-sm font-medium">Email Us</span>
             </a>
