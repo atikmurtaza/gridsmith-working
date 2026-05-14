@@ -115,4 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1500);
     });
   }
+
+  // Copy Email to Clipboard
+  const emailCopyBtn = document.getElementById('emailCopyBtn');
+  const emailCopyText = document.getElementById('emailCopyText');
+  
+  if (emailCopyBtn && emailCopyText) {
+    emailCopyBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigator.clipboard.writeText('contact.gridsmith@gmail.com').then(() => {
+        const originalText = emailCopyText.innerText;
+        emailCopyText.innerText = 'Copied!';
+        emailCopyText.style.color = 'var(--color-gold)';
+        
+        setTimeout(() => {
+          emailCopyText.innerText = originalText;
+          emailCopyText.style.color = '';
+        }, 2000);
+      });
+    });
+  }
 });
