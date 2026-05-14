@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import gsap from 'gsap';
@@ -7,22 +7,29 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const SPHERES = [
-  [-2, 1, 0],
-  [0, 1, 0],
-  [-2, 0, 0],
-  [0, 0, 0],
-  [2, 0, 0],
-  [2, -1, 0],
-  [0, -1, 0],
+  // Group 1 (Left Structure)
+  [-1.5, 1.5, 0],   // 0: top-left
+  [0.5, 1.5, 0],    // 1: top-center
+  [-1.5, -0.5, 0],  // 2: bottom-left
+  [0.5, -0.5, 0],   // 3: center-right
+
+  // Group 2 (Right Structure)
+  [-0.5, 0.5, 0],   // 4: middle-left
+  [1.5, 0.5, 0],    // 5: middle-right
+  [1.5, -1.5, 0],   // 6: bottom-right
+  [-0.5, -1.5, 0],  // 7: bottom-left
 ];
 
 const CYLINDERS = [
-  { start: 0, end: 1 },
-  { start: 0, end: 2 },
-  { start: 2, end: 3 },
-  { start: 3, end: 4 },
-  { start: 4, end: 5 },
-  { start: 5, end: 6 },
+  // Group 1 Connections
+  { start: 0, end: 1 }, // top horizontal
+  { start: 0, end: 2 }, // left vertical
+  { start: 2, end: 3 }, // lower horizontal
+
+  // Group 2 Connections
+  { start: 4, end: 5 }, // middle horizontal
+  { start: 5, end: 6 }, // right vertical
+  { start: 6, end: 7 }, // bottom horizontal
 ];
 
 export default function GridsmithLogo() {
@@ -30,107 +37,103 @@ export default function GridsmithLogo() {
   const spheresRef = useRef([]);
   const cylindersRef = useRef([]);
 
-  useLayoutEffect(() => {
-    let ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#main-scroll-container",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1, // Smooth scrub
-        }
-      });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const triggerEl = document.getElementById('main-scroll-container');
+      if (!triggerEl) return;
 
-      // 0% -> 30%: Disassemble
-      // 30% -> 70%: Float chaotically
-      // 70% -> 100%: Reassemble
+      let ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: triggerEl,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1, // Smooth scrub
+          }
+        });
 
-      spheresRef.current.forEach((sphere, i) => {
-        if (!sphere) return;
-        const startPos = SPHERES[i];
-        
-        // Random drift positions
-        const randomX = startPos[0] + (Math.random() - 0.5) * 10;
-        const randomY = startPos[1] + (Math.random() - 0.5) * 10;
-        const randomZ = startPos[2] + (Math.random() - 0.5) * 10;
+        spheresRef.current.forEach((sphere, i) => {
+          if (!sphere) return;
+          const startPos = SPHERES[i];
+          
+          const randomX = startPos[0] + (Math.random() - 0.5) * 10;
+          const randomY = startPos[1] + (Math.random() - 0.5) * 10;
+          const randomZ = startPos[2] + (Math.random() - 0.5) * 10;
 
-        tl.to(sphere.position, {
-          x: randomX,
-          y: randomY,
-          z: randomZ,
-          ease: "power2.inOut",
-        }, 0); // Start at 0
+          tl.to(sphere.position, {
+            x: randomX,
+            y: randomY,
+            z: randomZ,
+            ease: "power2.inOut",
+          }, 0);
 
-        // Return to start
-        tl.to(sphere.position, {
-          x: startPos[0],
-          y: startPos[1],
-          z: startPos[2],
-          ease: "power2.inOut",
-        }, 0.6); // Start returning at 60% of scroll
-      });
+          tl.to(sphere.position, {
+            x: startPos[0],
+            y: startPos[1],
+            z: startPos[2],
+            ease: "power2.inOut",
+          }, 0.6);
+        });
 
-      cylindersRef.current.forEach((cyl, i) => {
-        if (!cyl) return;
-        
-        // Random drift and rotate
-        const randomX = (Math.random() - 0.5) * 15;
-        const randomY = (Math.random() - 0.5) * 15;
-        const randomZ = (Math.random() - 0.5) * 15;
-        
-        const randomRotX = Math.random() * Math.PI * 4;
-        const randomRotY = Math.random() * Math.PI * 4;
+        cylindersRef.current.forEach((cyl, i) => {
+          if (!cyl) return;
+          
+          const randomX = (Math.random() - 0.5) * 15;
+          const randomY = (Math.random() - 0.5) * 15;
+          const randomZ = (Math.random() - 0.5) * 15;
+          
+          const randomRotX = Math.random() * Math.PI * 4;
+          const randomRotY = Math.random() * Math.PI * 4;
 
-        tl.to(cyl.position, {
-          x: "+=" + randomX,
-          y: "+=" + randomY,
-          z: "+=" + randomZ,
-          ease: "power2.inOut",
+          tl.to(cyl.position, {
+            x: "+=" + randomX,
+            y: "+=" + randomY,
+            z: "+=" + randomZ,
+            ease: "power2.inOut",
+          }, 0);
+          
+          tl.to(cyl.rotation, {
+            x: randomRotX,
+            y: randomRotY,
+            ease: "power2.inOut",
+          }, 0);
+
+          const connection = CYLINDERS[i];
+          const p1 = new THREE.Vector3(...SPHERES[connection.start]);
+          const p2 = new THREE.Vector3(...SPHERES[connection.end]);
+          const center = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+
+          tl.to(cyl.position, {
+            x: center.x,
+            y: center.y,
+            z: center.z,
+            ease: "power2.inOut",
+          }, 0.6);
+
+          tl.to(cyl.rotation, {
+            x: 0,
+            y: 0,
+            z: p1.x === p2.x ? 0 : Math.PI / 2,
+            ease: "power2.inOut",
+          }, 0.6);
+        });
+
+        tl.to(groupRef.current.rotation, {
+          y: Math.PI * 2,
+          x: Math.PI / 4,
+          ease: "none",
         }, 0);
         
-        tl.to(cyl.rotation, {
-          x: randomRotX,
-          y: randomRotY,
-          ease: "power2.inOut",
-        }, 0);
-
-        // Return to start
-        const connection = CYLINDERS[i];
-        const p1 = new THREE.Vector3(...SPHERES[connection.start]);
-        const p2 = new THREE.Vector3(...SPHERES[connection.end]);
-        const center = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
-
-        tl.to(cyl.position, {
-          x: center.x,
-          y: center.y,
-          z: center.z,
-          ease: "power2.inOut",
-        }, 0.6);
-
-        tl.to(cyl.rotation, {
+        tl.to(groupRef.current.rotation, {
+          y: Math.PI * 4,
           x: 0,
-          y: 0,
-          z: p1.x === p2.x ? 0 : Math.PI / 2, // Reset original rotation
           ease: "power2.inOut",
         }, 0.6);
-      });
 
-      // Overall group rotation for cinematic feel
-      tl.to(groupRef.current.rotation, {
-        y: Math.PI * 2,
-        x: Math.PI / 4,
-        ease: "none",
-      }, 0);
-      
-      tl.to(groupRef.current.rotation, {
-        y: Math.PI * 4,
-        x: 0,
-        ease: "power2.inOut",
-      }, 0.6);
+      }, groupRef);
+    }, 100);
 
-    }, groupRef);
-
-    return () => ctx.revert();
+    return () => clearTimeout(timer);
   }, []);
 
   // Ambient slight rotation even without scroll
