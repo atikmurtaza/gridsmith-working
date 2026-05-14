@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Overlay() {
   const containerRef = useRef();
   const testCarouselRef = useRef();
+  const [openFaq, setOpenFaq] = useState(null);
 
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
@@ -132,7 +133,7 @@ export default function Overlay() {
       </nav>
 
       {/* Hero Section */}
-      <section className="h-screen flex flex-col justify-between items-center text-center px-4 pt-[20vh] pb-[12vh]">
+      <section className="h-screen flex flex-col justify-between items-center text-center px-4 pt-[10vh] pb-[12vh]">
         <h1 className="text-5xl md:text-7xl font-bold text-gradient uppercase tracking-tight max-w-4xl drop-shadow-lg">
           Architects of the <br /> Digital Frontier
         </h1>
@@ -281,15 +282,25 @@ export default function Overlay() {
             <div ref={testCarouselRef} className="flex overflow-x-auto snap-x snap-mandatory gap-8 py-5 w-full no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
               {[
-                { quote: "Gridsmith absolutely transformed our brand identity and web presence. Their attention to detail and ability to blend sleek aesthetics with high performance is unmatched.", author: "James Davies", role: "CEO, TechNova", init: "JD", bg: "bg-bg-dark" },
-                { quote: "The stream overlays and emotes they designed for my channel took my content to the next level. I've never felt more professional as a creator. Highly recommended!", author: "Sarah Lin", role: "Twitch Partner", init: "SL", bg: "bg-bronze" },
-                { quote: "Their 3D architectural renders were breathtaking. They brought our conceptual blueprints to life with photorealistic lighting that helped us win a major client pitch.", author: "Michael Rowe", role: "Lead Architect, ARC Studio", init: "MR", bg: "bg-umber" },
-                { quote: "The bespoke E-Commerce platform they built for us increased our conversion rate by 40%. Beautiful design meets flawless functionality.", author: "Elena Katz", role: "Founder, Vora Fashion", init: "EK", bg: "bg-sand" },
+                { title: "Photorealistic 3D Logo Texturing", stars: 5, quote: "Fantastic work. Great attention to detail. Highly recommended.", author: "Larry T.", role: "Freelancer Client", init: "LT", bg: "bg-bg-dark" },
+                { title: "Complete Brand Identity", stars: 5, quote: "Gridsmith absolutely transformed our brand identity and web presence. Their attention to detail and ability to blend sleek aesthetics with high performance is unmatched.", author: "James Davis", role: "CEO, TechNova", init: "JD", bg: "bg-bg-dark" },
+                { title: "Twitch Stream Overlay Package", stars: 5, quote: "The stream overlays and emotes they designed for my channel took my content to the next level. I've never felt more professional as a creator. Highly recommended!", author: "Sarah Lin", role: "Twitch Partner", init: "SL", bg: "bg-bronze" },
+                { title: "Floor Plan Design & CAD Drafting", stars: 5, quote: "Gridsmith did an excellent job on our engineering project. Communication was professional and responsive throughout the process, deadlines were respected, and the quality of  work exceeded expectations. The drawings and technical details were delivered accurately and with great attention to detail. Highly recommended for anyone looking for reliable and skilled engineering and drafting services.", author: "Haris Bin A.", role: "Freelancer Client", init: "HA", bg: "bg-bronze" },
+                { title: "Architectural Visualizations", stars: 5, quote: "Their 3D architectural renders were breathtaking. They brought our conceptual blueprints to life with photorealistic lighting that helped us win a major client pitch.", author: "Michael Rowe", role: "Lead Architect, ARC Studio", init: "MR", bg: "bg-umber" },
+                { title: "Custom E-Commerce Platform", stars: 5, quote: "The bespoke E-Commerce platform they built for us increased our conversion rate by 40%. Beautiful design meets flawless functionality.", author: "Elena Katz", role: "Founder, Vora Fashion", init: "EK", bg: "bg-sand" },
               ].map((item, i) => (
                 <div key={i} className="flex-none w-full md:w-[calc(33.333%-21px)] snap-start glass-card p-8 flex flex-col relative">
                   <div className="text-6xl text-glass-border absolute top-2 right-6 font-serif leading-none">"</div>
-                  <div className="text-gold tracking-widest mb-4">★★★★★</div>
-                  <p className="text-lg italic mb-8 flex-grow">"{item.quote}"</p>
+
+                  <div className="mb-4 pr-8">
+                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">{item.title}</h3>
+                    <div className="text-gold tracking-widest text-sm">
+                      {"★".repeat(item.stars)}{"☆".repeat(5 - item.stars)}
+                    </div>
+                  </div>
+
+                  <p className="text-lg italic mb-8 flex-grow text-text-muted">"{item.quote}"</p>
+
                   <div className="flex items-center gap-4 pt-4 border-t border-glass-border">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${item.bg === 'bg-bg-dark' ? 'bg-black border border-glass-border' : item.bg}`}>{item.init}</div>
                     <div>
@@ -346,41 +357,34 @@ export default function Overlay() {
             <div className="glass-card p-8 flex flex-col gap-4 self-start w-full">
               <h3 className="text-2xl font-bold text-gold mb-4">Frequently Asked Questions</h3>
 
-              <details className="group bg-black/30 border border-glass-border rounded-lg p-4 transition duration-300 open:border-gold">
-                <summary className="flex justify-between items-center font-semibold text-gold-light cursor-pointer list-none">
-                  What is your typical turnaround time?
-                  <span className="text-gold text-2xl group-open:hidden">+</span>
-                  <span className="text-gold text-2xl hidden group-open:block">-</span>
-                </summary>
-                <p className="text-text-muted mt-4 pt-4 border-t border-glass-border">Depending on the scope, stream overlays take 1-2 weeks, while web development and 3D projects usually range from 3-6 weeks.</p>
-              </details>
-
-              <details className="group bg-black/30 border border-glass-border rounded-lg p-4 transition duration-300 open:border-gold">
-                <summary className="flex justify-between items-center font-semibold text-gold-light cursor-pointer list-none">
-                  Do you offer revisions?
-                  <span className="text-gold text-2xl group-open:hidden">+</span>
-                  <span className="text-gold text-2xl hidden group-open:block">-</span>
-                </summary>
-                <p className="text-text-muted mt-4 pt-4 border-t border-glass-border">Yes, all our packages include 2 rounds of revisions to ensure you are completely satisfied with the final result.</p>
-              </details>
-
-              <details className="group bg-black/30 border border-glass-border rounded-lg p-4 transition duration-300 open:border-gold">
-                <summary className="flex justify-between items-center font-semibold text-gold-light cursor-pointer list-none">
-                  What platforms do you build websites on?
-                  <span className="text-gold text-2xl group-open:hidden">+</span>
-                  <span className="text-gold text-2xl hidden group-open:block">-</span>
-                </summary>
-                <p className="text-text-muted mt-4 pt-4 border-t border-glass-border">We specialize in custom coded sites, Next.js, Webflow, and Shopify for E-Commerce solutions.</p>
-              </details>
-
-              <details className="group bg-black/30 border border-glass-border rounded-lg p-4 transition duration-300 open:border-gold">
-                <summary className="flex justify-between items-center font-semibold text-gold-light cursor-pointer list-none">
-                  Do you work with international clients?
-                  <span className="text-gold text-2xl group-open:hidden">+</span>
-                  <span className="text-gold text-2xl hidden group-open:block">-</span>
-                </summary>
-                <p className="text-text-muted mt-4 pt-4 border-t border-glass-border">Absolutely! We work with businesses, streamers, and creators globally.</p>
-              </details>
+              {[
+                { q: "What is your typical turnaround time?", a: "Depending on the scope, stream overlays take 1-2 weeks, while web development and 3D projects usually range from 3-6 weeks." },
+                { q: "Do you offer revisions?", a: "Yes, all our packages include 2 rounds of revisions to ensure you are completely satisfied with the final result." },
+                { q: "What platforms do you build websites on?", a: "We specialize in custom coded sites, Next.js, Webflow, and Shopify for E-Commerce solutions." },
+                { q: "Do you work with international clients?", a: "Absolutely! We work with businesses, streamers, and creators globally." }
+              ].map((faq, i) => (
+                <div key={i} className={`bg-black/30 border ${openFaq === i ? 'border-gold' : 'border-glass-border'} rounded-lg p-4 transition-colors duration-500 overflow-hidden`}>
+                  <div
+                    className="flex justify-between items-center font-semibold text-gold-light cursor-pointer select-none"
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  >
+                    {faq.q}
+                    <span
+                      className="text-gold text-2xl transition-transform duration-500"
+                      style={{ transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0deg)' }}
+                    >+</span>
+                  </div>
+                  <div
+                    className="transition-all duration-500 ease-in-out"
+                    style={{
+                      maxHeight: openFaq === i ? '200px' : '0px',
+                      opacity: openFaq === i ? 1 : 0
+                    }}
+                  >
+                    <p className="text-text-muted mt-4 pt-4 border-t border-glass-border">{faq.a}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

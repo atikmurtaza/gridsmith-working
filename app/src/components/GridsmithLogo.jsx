@@ -78,17 +78,22 @@ export default function GridsmithLogo() {
         cylindersRef.current.forEach((cyl, i) => {
           if (!cyl) return;
           
-          const randomX = (Math.random() - 0.5) * 15;
-          const randomY = (Math.random() - 0.5) * 15;
-          const randomZ = (Math.random() - 0.5) * 15;
+          const connection = CYLINDERS[i];
+          const p1 = new THREE.Vector3(...SPHERES[connection.start]);
+          const p2 = new THREE.Vector3(...SPHERES[connection.end]);
+          const center = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+
+          const randomX = center.x + (Math.random() - 0.5) * 15;
+          const randomY = center.y + (Math.random() - 0.5) * 15;
+          const randomZ = center.z + (Math.random() - 0.5) * 15;
           
           const randomRotX = Math.random() * Math.PI * 4;
           const randomRotY = Math.random() * Math.PI * 4;
 
           tl.to(cyl.position, {
-            x: "+=" + randomX,
-            y: "+=" + randomY,
-            z: "+=" + randomZ,
+            x: randomX,
+            y: randomY,
+            z: randomZ,
             ease: "power2.inOut",
           }, 0);
           
@@ -97,11 +102,6 @@ export default function GridsmithLogo() {
             y: randomRotY,
             ease: "power2.inOut",
           }, 0);
-
-          const connection = CYLINDERS[i];
-          const p1 = new THREE.Vector3(...SPHERES[connection.start]);
-          const p2 = new THREE.Vector3(...SPHERES[connection.end]);
-          const center = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
 
           tl.to(cyl.position, {
             x: center.x,
@@ -136,13 +136,7 @@ export default function GridsmithLogo() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Ambient slight rotation even without scroll
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += 0.001;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1;
-    }
-  });
+
 
   const material = new THREE.MeshStandardMaterial({
     color: '#d4af37',
