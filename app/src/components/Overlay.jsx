@@ -105,16 +105,19 @@ export default function Overlay() {
       </nav>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient uppercase tracking-tight max-w-4xl drop-shadow-lg">
+      <section className="h-screen flex flex-col justify-between items-center text-center px-4 pt-[20vh] pb-[12vh]">
+        <h1 className="text-5xl md:text-7xl font-bold text-gradient uppercase tracking-tight max-w-4xl drop-shadow-lg">
           Architects of the <br /> Digital Frontier
         </h1>
-        <p className="text-lg md:text-xl text-text-muted max-w-2xl mb-10 drop-shadow-md">
-          Premium web development, 3D modeling, and brand identity for forward-thinking businesses and creators.
-        </p>
-        <div className="flex gap-4">
-          <a href="#portfolio" className="btn btn-primary">View Our Work</a>
-          <a href="#services" className="btn btn-secondary">Our Services</a>
+        
+        <div className="flex flex-col items-center">
+          <p className="text-lg md:text-xl text-text-muted max-w-2xl mb-8 drop-shadow-md">
+            Premium web development, 3D modeling, and brand identity for forward-thinking businesses and creators.
+          </p>
+          <div className="flex gap-4">
+            <a href="#portfolio" className="btn btn-primary">View Our Work</a>
+            <a href="#services" className="btn btn-secondary">Our Services</a>
+          </div>
         </div>
       </section>
 
