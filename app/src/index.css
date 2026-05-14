@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-text-main overflow-x-hidden m-0 p-0 font-sans;
+    line-height: 1.6;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.05), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(205, 127, 50, 0.05), transparent 25%);
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #f3e5ab, #d4af37, #cd7f32);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn {
+    @apply inline-block px-8 py-3 rounded-full font-semibold uppercase tracking-wider transition-all duration-300 cursor-pointer no-underline text-sm;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #f3e5ab, #d4af37, #cd7f32);
+    color: #0a0a0a;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+  }
+}
