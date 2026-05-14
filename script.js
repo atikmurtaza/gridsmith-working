@@ -59,6 +59,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Testimonials Carousel Logic
+  const testCarousel = document.getElementById('testimonialsCarousel');
+  const btnTestPrev = document.querySelector('.carousel-btn.testimonials-prev');
+  const btnTestNext = document.querySelector('.carousel-btn.testimonials-next');
+
+  if (testCarousel && btnTestPrev && btnTestNext) {
+    btnTestNext.addEventListener('click', () => {
+      const itemWidth = testCarousel.querySelector('.testimonial-card').offsetWidth;
+      if (testCarousel.scrollLeft + testCarousel.clientWidth >= testCarousel.scrollWidth - 1) {
+        testCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        testCarousel.scrollBy({ left: itemWidth + 30, behavior: 'smooth' });
+      }
+    });
+
+    btnTestPrev.addEventListener('click', () => {
+      const itemWidth = testCarousel.querySelector('.testimonial-card').offsetWidth;
+      if (testCarousel.scrollLeft <= 0) {
+        testCarousel.scrollTo({ left: testCarousel.scrollWidth, behavior: 'smooth' });
+      } else {
+        testCarousel.scrollBy({ left: -(itemWidth + 30), behavior: 'smooth' });
+      }
+    });
+  }
+
   // Contact Form Mock Submission
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {

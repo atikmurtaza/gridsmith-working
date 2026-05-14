@@ -372,17 +372,44 @@ nav a:hover {
   padding: var(--section-padding);
 }
 
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+.testimonials-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
   margin-top: 40px;
 }
 
+.testimonials-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  gap: 30px;
+  padding: 20px 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.testimonials-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .testimonial-card {
+  flex: 0 0 calc(33.333% - 20px);
+  min-width: 320px;
+  scroll-snap-align: start;
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
 }
 
 .quote-icon {
