@@ -76,41 +76,31 @@ export default function Overlay() {
 
     const formData = new FormData(e.target);
 
-    // Web3Forms Access Key
-    // You will replace the text below with your actual key
-    formData.append("access_key", "2036f7b0-67eb-491e-aa49-1f23d642b0ec");
-
-    // Convert to JSON to bypass Cloudflare WAF issues
-    const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
+    // You will replace the URL below with your Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5qf3n6nMxOWfYWk4mFwNc986EQN1tXo-vB1pB9X3Py76XaLe2DafgBo3pV2QhvzY4/exec";
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // We don't await the json response because Google Apps Script 
+      // sometimes returns opaque CORS responses after redirects.
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: json
+        body: formData,
+        mode: "no-cors" // Crucial for bypassing Google's strict redirect CORS
       });
 
-      const data = await response.json();
+      // Since no-cors hides the response, we assume success if the fetch didn't throw a network error
+      btn.innerText = 'Message Sent!';
+      btn.style.background = '#f5f5f5';
+      btn.style.color = '#0a0a0a';
+      btn.style.opacity = '1';
+      setTimeout(() => {
+        e.target.reset();
+        btn.innerText = orig;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.disabled = false;
+      }, 3000);
 
-      if (data.success) {
-        btn.innerText = 'Message Sent!';
-        btn.style.background = '#f5f5f5';
-        btn.style.color = '#0a0a0a';
-        btn.style.opacity = '1';
-        setTimeout(() => {
-          e.target.reset();
-          btn.innerText = orig;
-          btn.style.background = '';
-          btn.style.color = '';
-          btn.disabled = false;
-        }, 3000);
-      } else {
-        throw new Error("Form submission failed");
-      }
     } catch (error) {
       console.error(error);
       btn.innerText = 'Error! Try Again.';
