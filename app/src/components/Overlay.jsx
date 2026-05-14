@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -6,7 +6,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Overlay() {
   const containerRef = useRef();
-  const portCarouselRef = useRef();
   const testCarouselRef = useRef();
 
   useLayoutEffect(() => {
@@ -32,7 +31,6 @@ export default function Overlay() {
     return () => ctx.revert();
   }, []);
 
-  // Carousel logic
   const scrollCarousel = (ref, dir) => {
     if (!ref.current) return;
     const carousel = ref.current;
@@ -95,7 +93,7 @@ export default function Overlay() {
       {/* Navigation */}
       <nav className="fixed w-full flex justify-between items-center px-8 py-4 z-50 backdrop-blur-md bg-black/30 border-b border-glass-border">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
-          <img src="/assets/logo.png" alt="Logo" className="h-8" />
+          <img src="./assets/logo.png" alt="Logo" className="h-8" />
           <span className="font-bold text-xl tracking-wider uppercase text-gradient">Gridsmith Ltd</span>
         </div>
         <div className="hidden md:flex gap-8 items-center">
@@ -161,48 +159,82 @@ export default function Overlay() {
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="py-20 px-8 reveal-section">
+      {/* Extended Portfolio Section replacing empty scroll space */}
+      <section id="portfolio" className="py-20 px-8 reveal-section bg-black/10">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="mb-12">
+          <div className="mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4">Selected Works</h2>
-            <p className="text-text-muted max-w-xl">A showcase of our most impactful projects across web, 3D, and branding.</p>
+            <p className="text-text-muted max-w-xl">A comprehensive showcase of our most impactful projects.</p>
           </div>
 
-          <div className="relative flex items-center w-full">
-            <button onClick={() => scrollCarousel(portCarouselRef, 'prev')} className="absolute -left-6 z-20 w-12 h-12 rounded-full bg-black/50 border border-glass-border backdrop-blur flex items-center justify-center hover:bg-gold/20 hover:text-gold transition text-xl cursor-pointer" aria-label="Previous Project">&#10094;</button>
+          <div className="flex flex-col gap-20">
             
-            <div ref={portCarouselRef} className="flex overflow-x-auto snap-x snap-mandatory gap-8 py-5 w-full no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              
-              {[
-                {img: 'portfolio2.png', tag: 'Web Development', title: 'Corporate SaaS Platform', desc: 'Sleek dark-mode enterprise website.'},
-                {img: 'portfolio3.png', tag: '3D Architecture', title: 'Modern Villa Concept', desc: 'Photorealistic exterior visualization at dusk.'},
-                {img: 'portfolio4.png', tag: '3D Modeling', title: 'Tech Hardware Prototype', desc: 'High-tech digital product floating concept.'},
-                {img: 'portfolio1.png', tag: 'Graphics Design', title: 'E-Sports Team Logo', desc: 'Aggressive and dynamic mascot logo design.'},
-                {img: 'portfolio2.png', tag: 'Web Development', title: 'E-Commerce Storefront', desc: 'High-conversion fashion retailer platform.'},
-              ].map((item, i) => (
-                <div key={i} className="flex-none w-full md:w-[calc(33.333%-21px)] snap-start relative group overflow-hidden rounded-xl glass-card">
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img src={`/assets/${item.img}`} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            {/* Graphic Designs */}
+            <div className="reveal-section">
+              <h3 className="text-2xl font-bold mb-6 text-gold-light border-b border-glass-border pb-2 tracking-wide uppercase">Graphic Designs</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                  <div key={`graphic-${i}`} className="group overflow-hidden rounded-xl glass-card relative aspect-[4/3]">
+                    <img src="./assets/portfolio1.png" alt="Graphic Design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <span className="text-gold font-bold text-xs uppercase tracking-wider mb-2">Graphics</span>
+                      <h4 className="text-xl font-bold">Brand Identity & Esports {i}</h4>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <span className="text-gold font-bold text-xs uppercase tracking-wider mb-2">{item.tag}</span>
-                    <h4 className="text-xl font-bold mb-2">{item.title}</h4>
-                    <p className="text-sm text-text-muted">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-
+                ))}
+              </div>
             </div>
 
-            <button onClick={() => scrollCarousel(portCarouselRef, 'next')} className="absolute -right-6 z-20 w-12 h-12 rounded-full bg-black/50 border border-glass-border backdrop-blur flex items-center justify-center hover:bg-gold/20 hover:text-gold transition text-xl cursor-pointer" aria-label="Next Project">&#10095;</button>
+            {/* Web Development */}
+            <div className="reveal-section">
+              <h3 className="text-2xl font-bold mb-6 text-gold-light border-b border-glass-border pb-2 tracking-wide uppercase">Web Development</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                  <div key={`web-${i}`} className="group overflow-hidden rounded-xl glass-card relative aspect-[4/3]">
+                    <img src="./assets/portfolio2.png" alt="Web Development" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <span className="text-gold font-bold text-xs uppercase tracking-wider mb-2">Web Dev</span>
+                      <h4 className="text-xl font-bold">Corporate SaaS Platform {i}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Architectural Designs */}
+            <div className="reveal-section">
+              <h3 className="text-2xl font-bold mb-6 text-gold-light border-b border-glass-border pb-2 tracking-wide uppercase">Architectural Designs</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                  <div key={`arch-${i}`} className="group overflow-hidden rounded-xl glass-card relative aspect-[4/3]">
+                    <img src="./assets/portfolio3.png" alt="Architecture" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <span className="text-gold font-bold text-xs uppercase tracking-wider mb-2">3D Arch</span>
+                      <h4 className="text-xl font-bold">Modern Villa Concept {i}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 3D Models */}
+            <div className="reveal-section">
+              <h3 className="text-2xl font-bold mb-6 text-gold-light border-b border-glass-border pb-2 tracking-wide uppercase">3D Models</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                  <div key={`3d-${i}`} className="group overflow-hidden rounded-xl glass-card relative aspect-[4/3]">
+                    <img src="./assets/portfolio4.png" alt="3D Model" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <span className="text-gold font-bold text-xs uppercase tracking-wider mb-2">3D Model</span>
+                      <h4 className="text-xl font-bold">Tech Hardware Prototype {i}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
-      </section>
-
-      {/* Explosion Scroll Area */}
-      <section className="h-[150vh] flex items-center justify-center pointer-events-none relative">
-        <p className="text-text-muted text-xl opacity-50 tracking-widest uppercase sticky top-1/2 -translate-y-1/2 drop-shadow-md">Keep Scrolling</p>
       </section>
 
       {/* Testimonials Section */}
@@ -350,7 +382,6 @@ export default function Overlay() {
               </a>
             ))}
             
-            {/* Email Copy Card */}
             <a onClick={copyEmail} className="flex-[0_0_calc(20%-16px)] min-w-[120px] flex flex-col items-center justify-center gap-3 p-6 glass-card hover:-translate-y-2 hover:bg-gold/10 hover:border-gold transition duration-300 group cursor-pointer text-text-main hover:text-gold no-underline">
               <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="text-gold group-hover:scale-110 transition-transform">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
@@ -365,7 +396,7 @@ export default function Overlay() {
       <footer className="py-10 px-8 bg-bg-dark border-t border-glass-border text-center">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <img src="/assets/logo.png" alt="Logo" className="h-6" />
+            <img src="./assets/logo.png" alt="Logo" className="h-6" />
             <span className="font-bold tracking-wider text-lg">Gridsmith Ltd</span>
           </div>
           <div className="flex gap-6 text-sm">
