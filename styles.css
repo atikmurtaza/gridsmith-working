@@ -517,19 +517,111 @@ textarea.form-control {
   min-height: 120px;
 }
 
-.contact-info {
+/* FAQ Section */
+.faq-container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
+  align-self: start;
 }
 
-.info-item h4 {
+.faq-item {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.faq-item[open] {
+  border-color: var(--color-gold);
+}
+
+.faq-item summary {
+  color: var(--color-gold-light);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none; /* Hide default arrow */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none; /* Hide arrow in Webkit */
+}
+
+.faq-item summary::after {
+  content: '+';
   color: var(--color-gold);
-  margin-bottom: 5px;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
-.info-item p {
+.faq-item[open] summary::after {
+  content: '-';
+}
+
+.faq-item p {
   color: var(--color-text-muted);
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--glass-border);
+  line-height: 1.5;
+}
+
+/* Social Contact */
+.social-contact {
+  padding: var(--section-padding);
+}
+
+.social-contact h2 {
+  text-align: center;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.social-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 25px 15px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 15px;
+  color: var(--color-text-main);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-card:hover {
+  transform: translateY(-5px);
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.social-card svg {
+  color: var(--color-gold);
+  transition: transform 0.3s ease;
+}
+
+.social-card:hover svg {
+  transform: scale(1.1);
+}
+
+.social-card span {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 /* Footer */
